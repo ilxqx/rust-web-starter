@@ -2786,6 +2786,7 @@ dependencies = [
  "num_cpus",
  "sea-orm",
  "serde",
+ "thiserror",
  "tokio",
  "tracing",
  "tracing-subscriber",

@@ -13,3 +13,4 @@ serde = { version = "1.0.219", features = ["derive"] }
 anyhow = "1.0.98"
 sea-orm = { version = "1.1.11", features = ["with-chrono", "debug-print", "sqlx-postgres", "with-rust_decimal", "runtime-tokio"] }
 num_cpus = "1.16.0"
+thiserror = "2.0.12"
