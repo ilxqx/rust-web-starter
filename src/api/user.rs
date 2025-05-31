@@ -4,14 +4,13 @@ use crate::entity::prelude::*;
 use crate::entity::sys_user;
 use crate::error::ApiResult;
 use crate::response::ApiResponse;
+use crate::valid::ValidQuery;
 use axum::extract::State;
 use axum::{Router, debug_handler, routing};
-use axum_valid::Valid;
 use sea_orm::prelude::*;
 use sea_orm::{Condition, QueryOrder, QueryTrait};
 use serde::Deserialize;
 use validator::Validate;
-use crate::query::Query;
 
 pub fn create_router() -> Router<AppState> {
     Router::new().route("/", routing::get(find_page))
@@ -29,10 +28,10 @@ pub struct UserQueryParams {
 #[debug_handler]
 async fn find_page(
     State(AppState { db }): State<AppState>,
-    Valid(Query(UserQueryParams {
+    ValidQuery(UserQueryParams {
         keyword,
         pagination,
-    })): Valid<Query<UserQueryParams>>,
+    }): ValidQuery<UserQueryParams>,
 ) -> ApiResult<ApiResponse<Page<sys_user::Model>>> {
     let paginator = SysUser::find()
         .apply_if(keyword.as_ref(), |query, keyword| {
