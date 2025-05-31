@@ -16,6 +16,7 @@ mod json;
 mod valid;
 mod validation;
 mod id;
+mod enumeration;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

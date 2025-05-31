@@ -8,7 +8,7 @@ use tracing::Span;
 pub struct LatencyOnResponse;
 
 impl<B> OnResponse<B> for LatencyOnResponse {
-    fn on_response(self, response: &Response<B>, latency: Duration, span: &Span) {
+    fn on_response(self, response: &Response<B>, latency: Duration, _: &Span) {
         tracing::info!(
             latency = %Latency(latency),
             status = response.status().as_u16(),

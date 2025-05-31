@@ -4,6 +4,7 @@ use sea_orm::ActiveValue;
 use sea_orm::entity::prelude::*;
 use sea_orm::prelude::async_trait::async_trait;
 use serde::{Deserialize, Serialize};
+use crate::enumeration::Gender;
 use crate::id::next_id;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
@@ -13,8 +14,9 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
     pub name: String,
-    pub gender: String,
+    pub gender: Gender,
     pub account: String,
+    #[serde(skip_serializing)]
     pub password: String,
     pub mobile_phone: String,
     pub birthday: Date,
@@ -28,7 +30,7 @@ pub enum Relation {}
 
 #[async_trait]
 impl ActiveModelBehavior for ActiveModel {
-    async fn before_save<C>(mut self, db: &C, insert: bool) -> Result<Self, DbErr>
+    async fn before_save<C>(mut self, _: &C, insert: bool) -> Result<Self, DbErr>
     where
         C: ConnectionTrait,
     {

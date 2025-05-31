@@ -13,6 +13,7 @@ use sea_orm::prelude::*;
 use sea_orm::{ActiveValue, Condition, IntoActiveModel, QueryOrder, QueryTrait};
 use serde::Deserialize;
 use validator::Validate;
+use crate::enumeration::Gender;
 
 pub fn create_router() -> Router<AppState> {
     Router::new()
@@ -61,7 +62,7 @@ async fn find_page(
 pub struct UserParams {
     #[validate(length(min = 1, max = 16, message = "姓名长度为1-16"))]
     pub name: String,
-    pub gender: String,
+    pub gender: Gender,
     #[validate(length(min = 1, max = 16, message = "账号长度为1-16"))]
     pub account: String,
     #[validate(length(min = 6, max = 16, message = "密码长度为6-16"))]
@@ -94,23 +95,26 @@ async fn update(
     Path(id): Path<String>,
     ValidJson(params): ValidJson<UserParams>,
 ) -> ApiResult<ApiResponse<sys_user::Model>> {
-    let existed_user = SysUser::find_by_id(id)
+    let existed_user = SysUser::find_by_id(&id)
         .one(&db)
         .await?
         .ok_or_else(|| ApiError::Biz(String::from("待修改的用户不存在")))?;
+    let old_password = existed_user.password.clone();
     let password = params.password.clone();
+    let mut existed_active_model = existed_user.into_active_model();
     let mut active_model = params.into_active_model();
-    active_model.id = ActiveValue::Unchanged(existed_user.id);
+    existed_active_model.clone_from(&active_model);
+    existed_active_model.id = ActiveValue::Unchanged(id);
     if password.is_empty() {
-        active_model.password = ActiveValue::Unchanged(existed_user.password);
+        existed_active_model.password = ActiveValue::Unchanged(old_password);
     } else {
-        active_model.password = ActiveValue::Set(bcrypt::hash(
+        existed_active_model.password = ActiveValue::Set(bcrypt::hash(
             &active_model.password.take().unwrap(),
             bcrypt::DEFAULT_COST,
         )?);
     }
 
-    let result = active_model.update(&db).await?;
+    let result = existed_active_model.update(&db).await?;
 
     Ok(ApiResponse::ok("ok", Some(result)))
 }
