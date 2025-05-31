@@ -7,6 +7,9 @@ mod error;
 mod logger;
 mod response;
 mod server;
+mod latency;
+mod common;
+mod serde;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
