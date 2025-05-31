@@ -19,3 +19,6 @@ xid = "1.1.1"
 bytesize = "2.0.1"
 validator = { version = "0.20.0", features = ["derive"] }
 axum-valid = { version = "0.23.0", features = ["full_validator"] }
+regex = "1.11.1"
+idgenerator = "2.0.0"
+bcrypt = "0.17.0"
