@@ -4,13 +4,14 @@ use crate::entity::prelude::*;
 use crate::entity::sys_user;
 use crate::error::ApiResult;
 use crate::response::ApiResponse;
-use axum::extract::{Query, State};
+use axum::extract::State;
 use axum::{Router, debug_handler, routing};
 use axum_valid::Valid;
 use sea_orm::prelude::*;
 use sea_orm::{Condition, QueryOrder, QueryTrait};
 use serde::Deserialize;
 use validator::Validate;
+use crate::query::Query;
 
 pub fn create_router() -> Router<AppState> {
     Router::new().route("/", routing::get(find_page))

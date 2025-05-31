@@ -10,6 +10,9 @@ mod server;
 mod latency;
 mod common;
 mod serde;
+mod query;
+mod path;
+mod json;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
