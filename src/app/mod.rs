@@ -18,6 +18,7 @@ pub mod validation;
 pub mod id;
 pub mod enumeration;
 mod auth;
+pub mod middleware;
 
 #[derive(Clone)]
 pub struct AppState {

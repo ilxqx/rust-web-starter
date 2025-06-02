@@ -3332,11 +3332,13 @@ version = "0.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fdb0c213ca27a9f57ab69ddb290fd80d970922355b83ae380b395d3986b8a2e"
 dependencies = [
+ "base64 0.22.1",
  "bitflags 2.9.1",
  "bytes",
  "http",
  "http-body",
  "http-body-util",
+ "mime",
  "pin-project-lite",
  "tokio",
  "tower-layer",
