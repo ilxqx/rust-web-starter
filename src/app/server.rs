@@ -1,3 +1,5 @@
+use crate::app::AppState;
+use crate::app::latency::LatencyOnResponse;
 use crate::config::ServerConfig;
 use axum::Router;
 use axum::extract::{DefaultBodyLimit, Request};
@@ -10,8 +12,6 @@ use tower_http::cors::CorsLayer;
 use tower_http::normalize_path::NormalizePathLayer;
 use tower_http::timeout::TimeoutLayer;
 use tower_http::trace::TraceLayer;
-use crate::app::AppState;
-use crate::app::latency::LatencyOnResponse;
 
 pub struct Server {
     config: &'static ServerConfig,

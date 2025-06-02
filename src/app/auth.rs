@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 const DEFAULT_SECRET: &str = "12345678";
 static DEFAULT_JWT: LazyLock<JWT> = LazyLock::new(|| JWT::default());
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Debug, Clone)]
 pub struct Principal {
     pub id: String,
     pub name: String

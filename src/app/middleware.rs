@@ -1,9 +1,14 @@
 use std::pin::Pin;
+use std::sync::LazyLock;
 use axum::body::Body;
 use axum::http::{header, Request, Response};
 use tower_http::auth::{AsyncAuthorizeRequest, AsyncRequireAuthorizationLayer};
 use crate::app::auth::{get_jwt, JWT};
 use crate::app::error::ApiError;
+
+static AUTH_LAYER: LazyLock<AsyncRequireAuthorizationLayer<JWTAuth>> = LazyLock::new(|| {
+    AsyncRequireAuthorizationLayer::new(JWTAuth::new(get_jwt()))
+});
 
 #[derive(Clone)]
 pub struct JWTAuth {
@@ -46,6 +51,6 @@ impl AsyncAuthorizeRequest<Body> for JWTAuth {
     }
 }
 
-pub fn get_auth_layer() -> AsyncRequireAuthorizationLayer<JWTAuth> {
-    AsyncRequireAuthorizationLayer::new(JWTAuth::new(get_jwt()))
+pub fn get_auth_layer() -> &'static AsyncRequireAuthorizationLayer<JWTAuth> {
+    &AUTH_LAYER
 }

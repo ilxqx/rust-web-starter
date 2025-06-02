@@ -14,6 +14,7 @@ use crate::app::error::{ApiError, ApiResult};
 use crate::app::path::Path;
 use crate::app::valid::{ValidJson, ValidQuery};
 use crate::app::response::ApiResponse;
+use crate::app::utils::encode_password;
 
 pub fn create_router() -> Router<AppState> {
     Router::new()
@@ -84,10 +85,7 @@ async fn create(
         return Err(ApiError::Biz(String::from("密码不能为空")));
     }
     let mut active_model = params.into_active_model();
-    active_model.password = ActiveValue::Set(bcrypt::hash(
-        &active_model.password.take().unwrap(),
-        bcrypt::DEFAULT_COST,
-    )?);
+    active_model.password = ActiveValue::Set(encode_password(&active_model.password.take().unwrap())?);
     let result = active_model.insert(&db).await?;
 
     Ok(ApiResponse::ok("ok", Some(result)))
@@ -112,10 +110,7 @@ async fn update(
     if password.is_empty() {
         existed_active_model.password = ActiveValue::Unchanged(old_password);
     } else {
-        existed_active_model.password = ActiveValue::Set(bcrypt::hash(
-            &active_model.password.take().unwrap(),
-            bcrypt::DEFAULT_COST,
-        )?);
+        existed_active_model.password = ActiveValue::Set(encode_password(&active_model.password.take().unwrap())?);
     }
 
     let result = existed_active_model.update(&db).await?;
