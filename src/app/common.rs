@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
-use crate::serde::deserialize_number;
+use crate::app::serde::deserialize_number;
 
 const DEFAULT_PAGE: u64 = 1;
 const DEFAULT_SIZE: u64 = 15;
@@ -35,7 +35,7 @@ impl<T> Page<T> {
     pub fn new(page: u64, size: u64, total: u64, items: Vec<T>) -> Self {
         Self { page, size, total, items }
     }
-    
+
     pub fn from_pagination(pagination: PaginationParams, total: u64, items: Vec<T>) -> Self {
         Self::new(pagination.page, pagination.size, total, items)
     }

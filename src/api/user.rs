@@ -1,19 +1,19 @@
-use crate::app::AppState;
-use crate::common::{Page, PaginationParams};
 use crate::entity::prelude::*;
 use crate::entity::sys_user;
 use crate::entity::sys_user::ActiveModel;
-use crate::error::{ApiError, ApiResult};
-use crate::path::Path;
-use crate::response::ApiResponse;
-use crate::valid::{ValidJson, ValidQuery};
 use axum::extract::State;
 use axum::{Router, debug_handler, routing};
 use sea_orm::prelude::*;
 use sea_orm::{ActiveValue, Condition, IntoActiveModel, QueryOrder, QueryTrait};
 use serde::Deserialize;
 use validator::Validate;
-use crate::enumeration::Gender;
+use crate::app::AppState;
+use crate::app::common::{Page, PaginationParams};
+use crate::app::enumeration::Gender;
+use crate::app::error::{ApiError, ApiResult};
+use crate::app::path::Path;
+use crate::app::valid::{ValidJson, ValidQuery};
+use crate::app::response::ApiResponse;
 
 pub fn create_router() -> Router<AppState> {
     Router::new()
@@ -59,15 +59,16 @@ async fn find_page(
 }
 
 #[derive(Debug, Deserialize, Validate, DeriveIntoActiveModel)]
+#[serde(rename_all = "camelCase")]
 pub struct UserParams {
     #[validate(length(min = 1, max = 16, message = "姓名长度为1-16"))]
     pub name: String,
     pub gender: Gender,
     #[validate(length(min = 1, max = 16, message = "账号长度为1-16"))]
     pub account: String,
-    #[validate(length(min = 6, max = 16, message = "密码长度为6-16"))]
+    #[validate(length(max = 16, message = "密码长度为6-16"))]
     pub password: String,
-    #[validate(custom(function = "crate::validation::is_mobile_phone"))]
+    #[validate(custom(function = "crate::app::validation::is_mobile_phone"))]
     pub mobile_phone: String,
     pub birthday: Date,
     #[serde(default)]
@@ -79,6 +80,9 @@ async fn create(
     State(AppState { db }): State<AppState>,
     ValidJson(params): ValidJson<UserParams>,
 ) -> ApiResult<ApiResponse<sys_user::Model>> {
+    if params.password.is_empty() {
+        return Err(ApiError::Biz(String::from("密码不能为空")));
+    }
     let mut active_model = params.into_active_model();
     active_model.password = ActiveValue::Set(bcrypt::hash(
         &active_model.password.take().unwrap(),

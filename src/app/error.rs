@@ -2,7 +2,7 @@ use axum::extract::rejection::{JsonRejection, PathRejection, QueryRejection};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum_valid::ValidRejection;
-use crate::response::ApiResponse;
+use crate::app::response::ApiResponse;
 
 pub type ApiResult<T> = Result<T, ApiError>;
 
@@ -24,6 +24,8 @@ pub enum ApiError {
     Validation(String),
     #[error("密码Hash错误: {0}")]
     Bcrypt(#[from] bcrypt::BcryptError),
+    #[error("JWT错误: {0}")]
+    JWT(#[from] jsonwebtoken::errors::Error),
     #[error("{0}")]
     Biz(String),
     #[error("错误: {0}")]
@@ -46,6 +48,7 @@ impl ApiError {
             ApiError::MethodNotAllowed => StatusCode::METHOD_NOT_ALLOWED,
             ApiError::Database(_) | ApiError::Bcrypt(_) | ApiError::Internal(_) => StatusCode::INTERNAL_SERVER_ERROR,
             ApiError::Query(_) | ApiError::Path(_) | ApiError::Json(_) | ApiError::Validation(_) => StatusCode::BAD_REQUEST,
+            ApiError::JWT(_) => StatusCode::UNAUTHORIZED,
             ApiError::Biz(_) => StatusCode::OK,
         }
     }

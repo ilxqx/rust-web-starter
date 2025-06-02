@@ -1,9 +1,10 @@
 use axum::Router;
-use crate::error::{ApiError, ApiResult};
+use crate::app::AppState;
+use crate::app::error::{ApiError, ApiResult};
 
 mod user;
 
-pub fn create_router() -> Router<crate::app::AppState> {
+pub fn create_router() -> Router<AppState> {
     Router::new()
         .nest(
             "/api",

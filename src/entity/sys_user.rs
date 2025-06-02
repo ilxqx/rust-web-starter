@@ -4,8 +4,8 @@ use sea_orm::ActiveValue;
 use sea_orm::entity::prelude::*;
 use sea_orm::prelude::async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use crate::enumeration::Gender;
-use crate::id::next_id;
+use crate::app::enumeration::Gender;
+use crate::app::id::next_id;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(schema_name = "demo", table_name = "sys_user")]

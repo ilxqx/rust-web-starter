@@ -22,3 +22,4 @@ axum-valid = { version = "0.23.0", features = ["full_validator"] }
 regex = "1.11.1"
 idgenerator = "2.0.0"
 bcrypt = "0.17.0"
+jsonwebtoken = "9.3.1"
