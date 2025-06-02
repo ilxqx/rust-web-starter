@@ -1,0 +1,77 @@
+.userTable {
+  width: 100%;
+}
+
+.userHeaderActions {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 1rem;
+}
+
+.actionButtons {
+  display: flex;
+
+  gap: 0.5rem;
+}
+
+.searchInput {
+  max-width: 300px;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.5rem;
+
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  border-radius: 9999px;
+}
+
+.statusActive {
+  color: rgb(22, 92, 38);
+
+  background-color: rgba(46, 160, 67, 0.15);
+}
+
+.statusInactive {
+  color: rgb(139, 32, 32);
+
+  background-color: rgba(201, 44, 44, 0.15);
+}
+
+.formGrid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.modalFooter {
+  display: flex;
+
+  gap: 0.75rem;
+  justify-content: flex-end;
+
+  margin-top: 1.5rem;
+}
+
+.paginationContainer {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 1rem;
+
+  border-top: 1px solid #eaeaea;
+}

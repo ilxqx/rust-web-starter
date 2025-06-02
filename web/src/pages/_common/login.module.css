@@ -1,0 +1,20 @@
+.login {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+
+  background: linear-gradient(45deg, transparent, var(--mantine-color-blue-0));
+
+  .form {
+    width: rem(420);
+
+    padding: var(--mantine-spacing-xxl);
+
+    background-color: var(--mantine-color-white);
+    border-radius: var(--mantine-radius-lg);
+    box-shadow: var(--mantine-shadow-box-md);
+  }
+}
