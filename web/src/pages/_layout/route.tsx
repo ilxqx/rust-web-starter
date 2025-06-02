@@ -48,7 +48,7 @@ function Layout() {
             return {
               isAuthenticated: false,
             }
-          })
+          }, true)
 
           router.invalidate();
           router.navigate({
